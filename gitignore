@@ -1,0 +1,7 @@
+banco.db
+backups/
+__pycache__/
+*.pyc
+# NOTA: o .env está propositalmente FORA do .gitignore neste
+# laboratório, para que o Gitleaks possa encontrá-lo. Na vida
+# real, .env DEVE estar no .gitignore.

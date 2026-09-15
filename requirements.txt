@@ -1,0 +1,7 @@
+# Dependências do BancoTerminal
+requests==2.28.1
+
+# Ferramentas de análise estática (instale para o laboratório)
+# semgrep
+# bandit
+# (gitleaks é um binário separado — ver README)

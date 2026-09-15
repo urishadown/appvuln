@@ -1,0 +1,54 @@
+name: SAST - BancoTerminal (Guardiao)
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '0 3 * * *'
+
+jobs:
+  # -------------------------------------------------------------
+  # 1) SEMGREP - analise de padroes de codigo inseguro
+  # -------------------------------------------------------------
+  semgrep:
+    name: Semgrep
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Rodar Semgrep
+        uses: semgrep/semgrep-action@v1
+        with:
+          config: p/security-audit
+
+  # -------------------------------------------------------------
+  # 2) BANDIT - analise de seguranca especifica de Python
+  # -------------------------------------------------------------
+  bandit:
+    name: Bandit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Instalar e rodar Bandit
+        run: |
+          pip install bandit
+          bandit -r . -f json -o bandit-report.json || true
+      - name: Guardar relatorio do Bandit
+        uses: actions/upload-artifact@v4
+        with:
+          name: bandit-report
+          path: bandit-report.json
+
+  # -------------------------------------------------------------
+  # 3) GITLEAKS - deteccao de segredos vazados
+  # -------------------------------------------------------------
+  gitleaks:
+    name: Gitleaks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # historico completo: pega segredos antigos
+      - name: Rodar Gitleaks
+        uses: gitleaks/gitleaks-action@v2
