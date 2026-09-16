@@ -1,0 +1,102 @@
+rules:
+
+  # ----------------------------------------
+  # SQL Injection
+  # ----------------------------------------
+  - id: python-sql-injection-pattern
+    languages:
+      - python
+    message: "Possível SQL Injection: consulta construída dinamicamente."
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: $DB.execute($QUERY)
+          - pattern: $CURSOR.execute($QUERY)
+          - pattern: $DB.executemany($QUERY, ...)
+      - metavariable-regex:
+          metavariable: $QUERY
+          regex: ".*\\+.*"
+
+
+  # ----------------------------------------
+  # Command Injection
+  # ----------------------------------------
+  - id: python-command-injection
+    languages:
+      - python
+    message: "Possível Command Injection: execução de comando do sistema."
+    severity: ERROR
+    pattern-either:
+      - pattern: os.system(...)
+      - pattern: os.popen(...)
+      - pattern: subprocess.call(..., shell=True)
+      - pattern: subprocess.run(..., shell=True)
+      - pattern: subprocess.Popen(..., shell=True)
+
+
+  # ----------------------------------------
+  # Code Injection
+  # ----------------------------------------
+  - id: python-code-injection
+    languages:
+      - python
+    message: "Possível Code Injection: eval() ou exec() detectado."
+    severity: ERROR
+    pattern-either:
+      - pattern: eval(...)
+      - pattern: exec(...)
+
+
+  # ----------------------------------------
+  # Pickle / desserialização perigosa
+  # ----------------------------------------
+  - id: python-unsafe-pickle
+    languages:
+      - python
+    message: "Desserialização potencialmente perigosa com pickle."
+    severity: ERROR
+    pattern-either:
+      - pattern: pickle.loads(...)
+      - pattern: pickle.load(...)
+
+
+  # ----------------------------------------
+  # Path Traversal
+  # ----------------------------------------
+  - id: python-path-traversal
+    languages:
+      - python
+    message: "Possível Path Traversal: entrada pode controlar caminho de arquivo."
+    severity: WARNING
+    pattern-either:
+      - pattern: open(...)
+      - pattern: pathlib.Path(...)
+
+
+  # ----------------------------------------
+  # SSRF
+  # ----------------------------------------
+  - id: python-ssrf
+    languages:
+      - python
+    message: "Possível SSRF: URL pode ser controlada externamente."
+    severity: WARNING
+    pattern-either:
+      - pattern: requests.get(...)
+      - pattern: requests.post(...)
+      - pattern: requests.put(...)
+      - pattern: requests.delete(...)
+      - pattern: urllib.request.urlopen(...)
+
+
+  # ----------------------------------------
+  # Template Injection
+  # ----------------------------------------
+  - id: python-template-injection
+    languages:
+      - python
+    message: "Possível Server-Side Template Injection."
+    severity: ERROR
+    pattern-either:
+      - pattern: jinja2.Template(...).render(...)
+      - pattern: Jinja2.Template(...).render(...)

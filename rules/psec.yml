@@ -1,0 +1,9 @@
+rules:
+  - id: python-os-system
+    languages:
+      - python
+    message: "Uso de os.system() detectado. Avalie risco de command injection."
+    severity: WARNING
+    patterns:
+      - pattern: os.system(...)
+ 
