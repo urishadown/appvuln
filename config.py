@@ -25,10 +25,10 @@ DATABASE_URL = "postgresql://svc_corebanking:C0reB@nk!ng_Prod_2024@10.0.2.50:543
 #   -> Detectado por: GITLEAKS
 # =====================================================================
 # Chave secreta usada para assinar os tokens de sessão (JWT)
-JWT_SECRET = "banco-jwt-super-secret-key-nao-compartilhe-2024"
+JWT_SECRET = "banco-jwt-super-secret-key-nao-compartilhe-2026"
 
 # Chave de API do provedor de Pix (formato realista de chave viva)
-PIX_API_KEY = "sk_live_51H8xQe2eZvKYlo2CqR8kL9mN4pT7wX3yB6vD1fG0hJ2kL5mN8pQ"
+PIX_API_KEY = "sk_live_51H8xQe2eZvKYlo2CqR8kL9mN4pT7wX3yB6vD1fG0hJ2kL5mN8pQf"
 
 # Credenciais de acesso à nuvem (formato AWS)
 AWS_ACCESS_KEY_ID = "AKIAIOSFODNN7EXAMPLE"
