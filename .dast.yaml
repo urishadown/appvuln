@@ -1,0 +1,23 @@
+name: DAST Completo - Banco
+on: [push]
+ 
+jobs:
+  preparar-alvo-e-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Subir aplicacao
+        run: |
+          docker build -t nikto-vulnerable .
+          docker run --name nikto-vuln --network host -p 3000:3000 nikto-vulnerable
+          sleep 30
+      - name: Nikto (higiene do servidor)
+        run: |
+	nikto -h http://localhost:3000 -Format htm \
+	    -output /tmp/nikto-report.html 
+      - name: Nuclei (falhas conhecidas)
+        uses: projectdiscovery/nuclei-action@main
+        with: { target: 'http://localhost:3000' }
+      - name: ZAP Baseline (analise DAST)
+        uses: zaproxy/action-baseline@v0.12.0
+        with: { target: 'http://localhost:3000' }
