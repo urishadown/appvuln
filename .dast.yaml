@@ -13,8 +13,8 @@ jobs:
           sleep 30
       - name: Nikto (higiene do servidor)
         run: |
-	nikto -h http://localhost:3000 -Format htm \
-	    -output /tmp/nikto-report.html 
+			nikto -h http://localhost:3000 -Format htm \
+	    	-output /tmp/nikto-report.html 
       - name: Nuclei (falhas conhecidas)
         uses: projectdiscovery/nuclei-action@main
         with: { target: 'http://localhost:3000' }
